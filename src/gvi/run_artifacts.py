@@ -16,6 +16,8 @@ from typing import Any
 import numpy as np
 
 from gvi.inference.mask_rle import BinaryMaskRle, decode_binary_mask
+from gvi.models import Scene
+from gvi.scene_memory import SceneMemory
 
 
 def sha256_file(path: Path) -> str:
@@ -156,6 +158,19 @@ def build_analysis_artifacts(
         for row in rows
         if row["mask_iou_previous"] is not None
     ]
+    scene_model = Scene.model_validate(scene)
+    memory = SceneMemory(scene_model)
+    zone_visits = {
+        track.track_id: {
+            zone.zone_id: [
+                visit.model_dump(mode="json")
+                for visit in memory.zone_visits(track.track_id, zone.zone_id)
+            ]
+            for zone in scene_model.zones
+        }
+        for track in scene_model.tracks
+    }
+
     summary = {
         "track_count": len(scene["tracks"]),
         "observation_count": len(rows),
@@ -164,6 +179,7 @@ def build_analysis_artifacts(
         "source_frame_count": frame_count,
         "objects_per_frame": objects_per_frame,
         "track_frames": track_frames,
+        "zone_visits": zone_visits,
         "track_gap_counts": {
             track_id: sum(
                 right - left - 1
@@ -240,6 +256,19 @@ def build_analysis_artifacts(
                     ).astype(np.uint8)
             image = Image.fromarray(pixels)
             draw = ImageDraw.Draw(image)
+            for zone in scene.get("zones", []):
+                zone_box = (
+                    round(zone["x_min"] * image.width),
+                    round(zone["y_min"] * image.height),
+                    round(zone["x_max"] * image.width),
+                    round(zone["y_max"] * image.height),
+                )
+                draw.rectangle(zone_box, outline=(255, 255, 255), width=2)
+                draw.text(
+                    (zone_box[0] + 6, zone_box[1] + 6),
+                    f"{zone['label']} ({zone['zone_id']})",
+                    fill=(255, 255, 255),
+                )
             for index, (track_id, concept, observation) in enumerate(frame_observations):
                 color = colors[index % len(colors)]
                 bbox = observation["bbox"]
