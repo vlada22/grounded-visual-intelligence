@@ -9,7 +9,7 @@ inspectable.
 Run both Colab notebooks with:
 
 - the same source MP4;
-- the same semantic concept (`red toy car` by default);
+- the same semantic concept (`person` for the default official sample);
 - prompt frame zero;
 - default confidence thresholds;
 - no interactive corrections or model-specific tuning.
@@ -28,9 +28,19 @@ Keep the two archives separate:
 - `article-01-hero-grounded-sam2.zip`
 - `article-01-hero-sam3-transformers.zip`
 
-Each archive contains the raw model recording, model-independent `scene.json`,
-RLE masks, and `run-metrics.json`. Do not include the source video, access
-tokens, or model weights.
+Each archive contains:
+
+- the deterministically prepared three-second comparison clip;
+- an annotated overlay preview and contact sheet for visual inspection;
+- per-frame track measurements and an aggregate analysis summary;
+- the raw model recording and model-independent `scene.json`;
+- portable RLE masks;
+- phase timings, GPU/runtime/package provenance, source and checkpoint hashes;
+- an integrity manifest with a SHA-256 digest for every included file.
+
+Do not include access tokens, original user-uploaded source videos, model weights,
+or full model caches. The prepared clip is an internal comparison artifact; check
+redistribution rights before publishing it.
 
 ## What we will inspect
 
@@ -40,8 +50,10 @@ tokens, or model weights.
 4. missing-mask gaps around occlusion;
 5. visibly incorrect or leaking masks;
 6. whether Transformers SAM 3 completes on the 15 GiB T4 preset;
-7. smoke-test elapsed time and peak allocated GPU memory;
-8. whether both artifacts answer the same deterministic questions correctly.
+7. model load, prompt/detection, session initialization, and propagation time;
+8. peak allocated and reserved GPU memory plus peak process RSS;
+9. mask-area and consecutive-mask-IoU stability;
+10. whether both artifacts answer the same deterministic questions correctly.
 
 If one pipeline fails before inference, preserve the complete error text and
 GPU model. Setup reliability is part of the applied result.
