@@ -1,67 +1,65 @@
-# SAM 3.1 integration boundary
+# SAM 3 Transformers integration boundary
 
-SAM 3.1 is retained as an optional, non-critical adapter experiment. Its model
-weights require discretionary Hugging Face approval, so Article 1 does not rely
-on it for reproducibility. It must not leak PyTorch tensors or model lifecycle
-concerns into the Visual Evidence Graph.
+Article 1 uses the official `facebook/sam3` Transformers video path as its
+primary recorded perception experience. Model access is gated through Hugging
+Face, so Grounding DINO + SAM 2.1 remains the ungated reproducible baseline.
+Neither path leaks PyTorch tensors or model lifecycle concerns into the Visual
+Evidence Graph.
 
-## Upstream contract
+## Recorded-output contract
 
-The official SAM 3.1 video example returns one response per propagated frame:
+The Colab runner prepares the repository-owned source video deterministically,
+loads `Sam3VideoModel` and `Sam3VideoProcessor`, adds the text prompt, and records
+the streamed response for every propagated frame.
 
-```text
-response["frame_index"]
-response["outputs"]["out_obj_ids"]
-response["outputs"]["out_probs"]
-response["outputs"]["out_boxes_xywh"]
-response["outputs"]["out_binary_masks"]
-```
+The portable `Sam3RecordedOutput` retains:
 
-`out_boxes_xywh` uses normalized coordinates. Object IDs persist across the
-propagated masklet. The relevant upstream references are:
+- the upstream persistent object ID;
+- prompt/track probability metadata;
+- pixel-space bounding boxes;
+- frame indices and timestamps;
+- one row-major binary-mask RLE artifact per visible observation;
+- model revision, runtime, package, timing, memory, and source provenance.
 
-- https://github.com/facebookresearch/sam3/blob/main/examples/sam3.1_video_predictor_example.ipynb
-- https://github.com/facebookresearch/sam3/blob/main/sam3/visualization_utils.py
+## Repository boundary
 
-## Repository contract
-
-The inference worker materializes each binary mask as a separate row-major RLE
-artifact and records its URI. It writes `Sam3RecordedOutput`, a JSON-safe
-representation that retains the official object IDs, probabilities, and
-normalized boxes.
-
-The core adapter then:
+`Sam3Adapter` converts the recording into the same model-independent `Scene`
+document used by the Grounded SAM 2 adapter. It:
 
 1. validates frame and column consistency;
-2. converts normalized XYWH boxes into pixel XYXY boxes;
-3. groups observations by persistent SAM object ID;
-4. marks observations below the configured confidence threshold as not visible;
-5. removes tracks that never have a visible observation;
-6. records model, version, task, and prompt provenance;
-7. emits a model-independent `Scene` document.
+2. groups observations by persistent object ID;
+3. preserves the score without presenting it as calibrated frame confidence;
+4. records model, version, task, prompt, and source provenance;
+5. emits model-neutral tracks consumed by `SceneMemory`;
+6. leaves masks as portable URI-addressed artifacts.
+
+The core `gvi` package deliberately does not depend on Transformers, PyTorch,
+CUDA, SAM 3, or Hugging Face. GPU execution belongs to the Colab boundary;
+tests and the browser explorer operate on recorded JSON and RLE artifacts.
+
+## Controlled Article 1 run
+
+The matched run uses:
+
+- `assets/article-01/sample.mp4` with a verified SHA-256;
+- the `white cup` prompt;
+- ten seconds at 4 fps and maximum width 560;
+- FP16 on a Tesla T4;
+- identical A/B zone definitions for both model paths.
+
+The completed SAM 3 archive contains 40 visible observations with no track gap.
+It agrees with the Grounded SAM 2 masks at 0.9694 mean IoU across all 40 matched
+frames. See `results.md` for the controlled-run evidence and limitations.
 
 ## Deliberate omissions
 
-`Sam3InferenceWorker` now owns:
+Article 1 does not provide:
 
-- session creation and cleanup;
-- text-prompt submission;
-- streamed propagation;
-- tensor-to-CPU conversion;
-- binary-mask encoding;
-- raw artifact manifests;
+- arbitrary public uploads;
+- live hosted GPU inference;
+- browser-native model execution;
+- checkpoint redistribution;
+- a general SAM 2 versus SAM 3 benchmark.
 
-The worker accepts a predictor protocol, allowing its lifecycle and output
-contract to be tested without a GPU. `build_official_predictor()` imports the
-official model lazily when the upstream package and gated weights are available.
-
-This checkpoint still does not install SAM 3.1, download gated weights, probe
-video metadata, or prescribe GPU infrastructure. Real inference will add:
-
-- video probing and frame validation;
-- latency and peak-memory measurements;
-- an environment-specific runner for the selected GPU;
-- the first redistribution-safe prepared video.
-
-This separation lets tests and the web application operate without a GPU while
-keeping recorded model outputs reproducible.
+The browser experience consumes only the validated recorded artifacts. This
+keeps the publication reproducible while making the model boundary replaceable.
