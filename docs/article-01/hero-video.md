@@ -10,9 +10,9 @@
 - video: H.264, 1280 × 720, 24 fps, 240 frames
 - audio: AAC; intentionally removed by the comparison preprocessing step
 
-Keep the original source outside Git until the final site asset layout is chosen.
-The notebooks reject any upload whose source digest does not match the approved
-file.
+The approved source is versioned at `assets/article-01/sample.mp4`. Both
+notebooks load it from their authenticated repository clone and reject the file
+before GPU work if its digest does not match.
 
 ## Prepared comparison
 
