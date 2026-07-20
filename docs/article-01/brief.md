@@ -18,10 +18,10 @@ alone?
 
 ## Demonstrated pipeline
 
-1. Grounding DINO locates a prompted concept in a prepared video's first frame.
-2. SAM 2.1 propagates masks and persistent object IDs through the video.
-3. Boxes, grounding confidence, masks, and track IDs are normalized
-   into the Visual Evidence Graph.
+1. SAM 3 tracks a text-prompted concept through the prepared hero video.
+2. Grounding DINO plus SAM 2.1 runs as the ungated comparison baseline.
+3. Boxes, masks, confidence metadata, and track IDs from either system are
+   normalized into the same Visual Evidence Graph.
 4. Deterministic tools compute counts, visibility intervals, zone visits,
    ordering, and supporting evidence.
 5. An LLM selects tools and writes an answer.
@@ -65,9 +65,10 @@ must follow the results.
 
 ## Hero scene
 
-A controlled tabletop sequence with two toy vehicles, cups or boxes that cause
-short occlusions, one marked zone, one entry or exit, and modest camera motion.
-The final scene must be safe to redistribute and visually legible without text.
+A ten-second Gemini-generated tabletop sequence in which a white cup moves from
+marked zone A to zone B across a visible blue divider, with hand and notebook
+occlusion. A red apple appears late as a new-object discovery probe. The source
+is supplied and approved for publication by the repository owner.
 
 ## Completion criteria
 
