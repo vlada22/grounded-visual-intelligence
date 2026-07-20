@@ -1,4 +1,4 @@
-# SAM 3.1 versus Grounded SAM 2 comparison
+# SAM 3 versus Grounded SAM 2 comparison
 
 This is an applied comparison, not a general model benchmark. Its purpose is to
 select the most useful perception path for Article 1 and make the choice
@@ -16,9 +16,9 @@ Run both Colab notebooks with:
 
 Grounding DINO conventionally receives the concept with a trailing period, but
 the recorded prompt is normalized without it. Both notebooks deterministically
-prepare the first three seconds at 4 fps and at most 640 pixels wide. The SAM 3.1
-runner also disables compilation and Flash Attention 3, uses FP16 on a T4, and
-caps output at four objects. This is a correctness smoke test, not a final
+prepare the first three seconds at 4 fps. The Transformers SAM 3 runner uses
+the documented 560-pixel lower-memory configuration, keeps decoded video on
+CPU, and uses FP16 on a T4. This is a correctness smoke test, not a final
 throughput comparison.
 
 ## Return artifacts
@@ -26,7 +26,7 @@ throughput comparison.
 Keep the two archives separate:
 
 - `article-01-hero-grounded-sam2.zip`
-- `article-01-hero-sam31.zip`
+- `article-01-hero-sam3-transformers.zip`
 
 Each archive contains the raw model recording, model-independent `scene.json`,
 RLE masks, and `run-metrics.json`. Do not include the source video, access
@@ -39,7 +39,7 @@ tokens, or model weights.
 3. identity switches and duplicate tracks;
 4. missing-mask gaps around occlusion;
 5. visibly incorrect or leaking masks;
-6. whether SAM 3.1 completes on the 15 GiB T4 preset;
+6. whether Transformers SAM 3 completes on the 15 GiB T4 preset;
 7. smoke-test elapsed time and peak allocated GPU memory;
 8. whether both artifacts answer the same deterministic questions correctly.
 
