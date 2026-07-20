@@ -7,6 +7,8 @@ The first article, **Ask the Video, Not Just the VLM**, builds a temporal visual
 memory from object tracks and exposes deterministic tools for counting,
 timing, zone occupancy, and evidence retrieval.
 
+[Open the interactive evidence explorer](https://grounded-visual-intelligence-lab.vlatko-nikol-0153.chatgpt.site)
+
 ## Current checkpoint
 
 - Visual Evidence Graph domain model
@@ -37,6 +39,15 @@ uv run gvi-ingest-sam3 \
 
 The demo writes a scene artifact, an LLM tool manifest, and a track-occupancy
 plot to `outputs/demo`.
+
+## Run SAM 3.1 on Colab
+
+The GPU path is intentionally an offline batch job. Open
+[`notebooks/article_01_sam3_colab.ipynb`](notebooks/article_01_sam3_colab.ipynb)
+in Google Colab, select a GPU runtime, and add `HF_TOKEN` plus a read-only
+`GITHUB_TOKEN` through Colab Secrets. The notebook uploads one prepared video,
+runs the same inference worker, records latency and peak GPU memory, and
+downloads a portable artifact bundle for the static evidence explorer.
 
 ## Project direction
 
