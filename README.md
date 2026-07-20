@@ -56,9 +56,11 @@ evidence schema:
 Use the identical source video and semantic prompt in both notebooks before
 tuning either model. While this repository is private, both require a read-only
 `GITHUB_TOKEN`. The SAM 3.1 runner additionally requires an `HF_TOKEN` approved
-for `facebook/sam3.1` and recommends at least 20 GiB of GPU memory. The resulting
-ZIP archives have distinct pipeline names and include `scene.json`, recorded
-model output, masks, and run metrics.
+for `facebook/sam3.1`. For the free-Colab smoke test, both notebooks prepare the
+first three seconds at 4 fps and at most 640 pixels wide; the SAM 3.1 runner uses
+a T4-oriented FP16, non-compiled configuration. The resulting ZIP archives have
+distinct pipeline names and include `scene.json`, recorded model output, masks,
+and run metrics.
 
 ## Project direction
 

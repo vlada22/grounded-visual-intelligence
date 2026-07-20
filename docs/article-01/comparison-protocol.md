@@ -8,15 +8,18 @@ inspectable.
 
 Run both Colab notebooks with:
 
-- the exact same MP4 bytes;
+- the same source MP4;
 - the same semantic concept (`red toy car` by default);
 - prompt frame zero;
 - default confidence thresholds;
 - no interactive corrections or model-specific tuning.
 
 Grounding DINO conventionally receives the concept with a trailing period, but
-the recorded prompt is normalized without it. Keep the video short and at 720p
-or below for the first SAM 3.1 run.
+the recorded prompt is normalized without it. Both notebooks deterministically
+prepare the first three seconds at 4 fps and at most 640 pixels wide. The SAM 3.1
+runner also disables compilation and Flash Attention 3, uses FP16 on a T4, and
+caps output at four objects. This is a correctness smoke test, not a final
+throughput comparison.
 
 ## Return artifacts
 
@@ -36,8 +39,9 @@ tokens, or model weights.
 3. identity switches and duplicate tracks;
 4. missing-mask gaps around occlusion;
 5. visibly incorrect or leaking masks;
-6. elapsed inference time and peak allocated GPU memory;
-7. whether both artifacts answer the same deterministic questions correctly.
+6. whether SAM 3.1 completes on the 15 GiB T4 preset;
+7. smoke-test elapsed time and peak allocated GPU memory;
+8. whether both artifacts answer the same deterministic questions correctly.
 
 If one pipeline fails before inference, preserve the complete error text and
 GPU model. Setup reliability is part of the applied result.
