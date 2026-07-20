@@ -103,11 +103,19 @@ class SceneMetadata(StrictModel):
     duration_s: float = Field(gt=0.0)
 
 
+class InferenceProvenance(StrictModel):
+    model_id: str = Field(min_length=1)
+    model_version: str | None = None
+    task: str = Field(min_length=1)
+    prompt: str | None = None
+
+
 class Scene(StrictModel):
     schema_version: str = "1.0"
     metadata: SceneMetadata
     tracks: tuple[Track, ...]
     zones: tuple[Zone, ...] = ()
+    provenance: tuple[InferenceProvenance, ...] = ()
 
     @model_validator(mode="after")
     def validate_unique_ids(self) -> Scene:
@@ -134,4 +142,3 @@ class ZoneVisit(StrictModel):
     time_range: TimeRange
     observed_duration_s: float = Field(ge=0.0)
     evidence: EvidenceRef
-

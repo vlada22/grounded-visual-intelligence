@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "scene_id": "sam3-tabletop-fixture",
+  "source_uri": "prepared/tabletop-fixture.mp4",
+  "prompt": "red toy car",
+  "model_id": "facebook/sam3",
+  "model_version": "3.1",
+  "width": 640,
+  "height": 360,
+  "fps": 2.0,
+  "frame_count": 5,
+  "frames": [
+    {
+      "frame_index": 0,
+      "out_obj_ids": [7],
+      "out_probs": [0.94],
+      "out_boxes_xywh": [
+        {"x": 0.05, "y": 0.4, "width": 0.12, "height": 0.18}
+      ],
+      "out_mask_uris": ["masks/frame-00000-object-7.rle.json"]
+    },
+    {
+      "frame_index": 1,
+      "out_obj_ids": [7],
+      "out_probs": [0.91],
+      "out_boxes_xywh": [
+        {"x": 0.25, "y": 0.4, "width": 0.12, "height": 0.18}
+      ],
+      "out_mask_uris": ["masks/frame-00001-object-7.rle.json"]
+    },
+    {
+      "frame_index": 2,
+      "out_obj_ids": [7],
+      "out_probs": [0.42],
+      "out_boxes_xywh": [
+        {"x": 0.44, "y": 0.4, "width": 0.12, "height": 0.18}
+      ],
+      "out_mask_uris": ["masks/frame-00002-object-7.rle.json"]
+    },
+    {
+      "frame_index": 3,
+      "out_obj_ids": [7],
+      "out_probs": [0.89],
+      "out_boxes_xywh": [
+        {"x": 0.63, "y": 0.4, "width": 0.12, "height": 0.18}
+      ],
+      "out_mask_uris": ["masks/frame-00003-object-7.rle.json"]
+    },
+    {
+      "frame_index": 4,
+      "out_obj_ids": [7],
+      "out_probs": [0.93],
+      "out_boxes_xywh": [
+        {"x": 0.82, "y": 0.4, "width": 0.12, "height": 0.18}
+      ],
+      "out_mask_uris": ["masks/frame-00004-object-7.rle.json"]
+    }
+  ]
+}
+

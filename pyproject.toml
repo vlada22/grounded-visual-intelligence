@@ -24,6 +24,7 @@ dev = [
 
 [project.scripts]
 gvi-demo = "gvi.demo:main"
+gvi-ingest-sam3 = "gvi.adapters.sam3:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/gvi"]
@@ -38,4 +39,3 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
-
