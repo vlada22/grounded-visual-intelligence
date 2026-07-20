@@ -9,8 +9,8 @@ fast, reproducible, and suitable for embedding beside the article.
 
 ## Demonstrated interaction
 
-- submit the representative temporal question;
-- inspect the deterministic `1.0–1.5 s` answer;
+- ask when the white cup moves from zone A to zone B;
+- inspect the deterministic transition time and dwell result;
 - seek to cited boundary frames;
 - highlight the relevant track or zone;
 - toggle perception overlays;
@@ -19,12 +19,13 @@ fast, reproducible, and suitable for embedding beside the article.
 
 The editorial layout treats the video as the primary artifact and the query,
 answer, evidence chips, and occupancy interval as a compact provenance chain.
-The generated tabletop plate is illustrative until the first prepared video and
-recorded Grounding DINO + SAM 2.1 output are available.
+The publishable hero source is the repository owner's Gemini-generated
+ten-second cup-crossing video. SAM 3 is the primary recorded path and Grounded
+SAM 2 remains the ungated baseline.
 
 ## Next data binding
 
-The Colab notebook downloads `grounded-sam2-output.json`, `scene.json`, mask
-artifacts, and run metrics. A small web export step will replace the illustrative
-constants with scene metadata, tracks, evidence references, and pre-rendered
-keyframes.
+The two Colab notebooks export the prepared clip, `scene.json`, masks,
+per-frame measurements, deterministic zone visits, preview media, and integrity
+metadata. The next web export binds those recorded artifacts to the GitHub-hosted
+explorer and replaces all illustrative constants.
