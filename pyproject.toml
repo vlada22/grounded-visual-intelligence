@@ -27,6 +27,7 @@ dev = [
 
 [project.scripts]
 gvi-demo = "gvi.demo:main"
+gvi-ingest-grounded-sam2 = "gvi.adapters.grounded_sam2:main"
 gvi-ingest-sam3 = "gvi.adapters.sam3:main"
 
 [tool.hatch.build.targets.wheel]

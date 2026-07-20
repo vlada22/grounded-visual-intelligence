@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "scene_id": "grounded-sam2-tabletop-fixture",
+  "source_uri": "prepared/tabletop-fixture.mp4",
+  "prompt": "red toy car",
+  "detector_model_id": "IDEA-Research/GroundingDINO",
+  "detector_model_version": "1.0-swin-t",
+  "tracker_model_id": "facebook/sam2",
+  "tracker_model_version": "2.1-hiera-large",
+  "width": 640,
+  "height": 360,
+  "fps": 2.0,
+  "frame_count": 4,
+  "seeds": [
+    {
+      "object_id": 1,
+      "label": "red toy car",
+      "grounding_score": 0.91,
+      "prompt_frame_index": 0,
+      "initial_box": {"x_min": 32, "y_min": 144, "x_max": 108.8, "y_max": 208.8}
+    }
+  ],
+  "frames": [
+    {
+      "frame_index": 0,
+      "object_ids": [1],
+      "boxes_xyxy": [{"x_min": 32, "y_min": 144, "x_max": 108.8, "y_max": 208.8}],
+      "mask_areas": [2511],
+      "mask_uris": ["masks/frame-00000-object-1.rle.json"]
+    },
+    {
+      "frame_index": 1,
+      "object_ids": [1],
+      "boxes_xyxy": [{"x_min": 160, "y_min": 144, "x_max": 236.8, "y_max": 208.8}],
+      "mask_areas": [2480],
+      "mask_uris": ["masks/frame-00001-object-1.rle.json"]
+    },
+    {
+      "frame_index": 3,
+      "object_ids": [1],
+      "boxes_xyxy": [{"x_min": 403.2, "y_min": 144, "x_max": 480, "y_max": 208.8}],
+      "mask_areas": [2499],
+      "mask_uris": ["masks/frame-00003-object-1.rle.json"]
+    }
+  ]
+}

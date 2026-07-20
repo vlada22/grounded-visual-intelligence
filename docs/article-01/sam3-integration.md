@@ -1,7 +1,9 @@
 # SAM 3.1 integration boundary
 
-SAM 3.1 is an optional GPU perception component. It must not leak PyTorch
-tensors or model lifecycle concerns into the Visual Evidence Graph.
+SAM 3.1 is retained as an optional, non-critical adapter experiment. Its model
+weights require discretionary Hugging Face approval, so Article 1 does not rely
+on it for reproducibility. It must not leak PyTorch tensors or model lifecycle
+concerns into the Visual Evidence Graph.
 
 ## Upstream contract
 
@@ -63,12 +65,3 @@ video metadata, or prescribe GPU infrastructure. Real inference will add:
 
 This separation lets tests and the web application operate without a GPU while
 keeping recorded model outputs reproducible.
-
-## Colab execution path
-
-`notebooks/article_01_sam3_colab.ipynb` is the first real-inference runner. It
-uses Colab only as disposable GPU compute: the notebook clones this branch and
-the official SAM repository, authenticates to the gated checkpoint through
-Colab Secrets, probes one uploaded video, invokes `Sam3InferenceWorker`, records
-latency and peak allocated GPU memory, and downloads the resulting artifact
-bundle. The deployed evidence explorer never depends on a live Colab session.

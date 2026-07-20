@@ -17,8 +17,9 @@ timing, zone occupancy, and evidence retrieval.
 - provider-neutral LLM tool contracts
 - synthetic executable example
 - initial Article 1 brief and evaluation plan
-- SAM 3.1 recorded-output adapter and fixture
-- dependency-injected SAM 3.1 inference worker
+- Grounding DINO + SAM 2.1 recorded-output adapter and fixture
+- ungated Colab inference path
+- optional SAM 3.1 adapter and dependency-injected worker
 - portable binary-mask RLE artifacts
 
 The core package deliberately has no PyTorch or SAM dependency. GPU inference
@@ -32,22 +33,22 @@ Requires Python 3.12 and [uv](https://docs.astral.sh/uv/).
 uv sync --all-extras
 uv run pytest
 uv run gvi-demo --output outputs/demo
-uv run gvi-ingest-sam3 \
-  tests/fixtures/sam3_tabletop_output.json \
-  outputs/sam3-tabletop-scene.json
+uv run gvi-ingest-grounded-sam2 \
+  tests/fixtures/grounded_sam2_tabletop_output.json \
+  outputs/grounded-sam2-tabletop-scene.json
 ```
 
 The demo writes a scene artifact, an LLM tool manifest, and a track-occupancy
 plot to `outputs/demo`.
 
-## Run SAM 3.1 on Colab
+## Run the perception stack on Colab
 
 The GPU path is intentionally an offline batch job. Open
-[`notebooks/article_01_sam3_colab.ipynb`](notebooks/article_01_sam3_colab.ipynb)
-in Google Colab, select a GPU runtime, and add `HF_TOKEN` plus a read-only
-`GITHUB_TOKEN` through Colab Secrets. The notebook uploads one prepared video,
-runs the same inference worker, records latency and peak GPU memory, and
-downloads a portable artifact bundle for the static evidence explorer.
+[`notebooks/article_01_grounded_sam2_colab.ipynb`](notebooks/article_01_grounded_sam2_colab.ipynb)
+in Google Colab and select a GPU runtime. While this repository is private, add
+a read-only `GITHUB_TOKEN` through Colab Secrets. Grounding DINO 1.0 and SAM 2.1
+weights come from public release URLs; no gated model token is required. The
+notebook uploads one prepared video and downloads a portable evidence bundle.
 
 ## Project direction
 

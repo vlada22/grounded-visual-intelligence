@@ -20,11 +20,11 @@ fast, reproducible, and suitable for embedding beside the article.
 The editorial layout treats the video as the primary artifact and the query,
 answer, evidence chips, and occupancy interval as a compact provenance chain.
 The generated tabletop plate is illustrative until the first prepared video and
-recorded SAM 3.1 output are available.
+recorded Grounding DINO + SAM 2.1 output are available.
 
 ## Next data binding
 
-The Colab notebook downloads `sam3-output.json`, mask artifacts, and run metrics.
-The Python adapter converts that recorded output into a model-independent
-`Scene`. A small web export step will then replace the illustrative constants
-with scene metadata, tracks, evidence references, and pre-rendered keyframes.
+The Colab notebook downloads `grounded-sam2-output.json`, `scene.json`, mask
+artifacts, and run metrics. A small web export step will replace the illustrative
+constants with scene metadata, tracks, evidence references, and pre-rendered
+keyframes.

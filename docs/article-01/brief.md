@@ -18,20 +18,21 @@ alone?
 
 ## Demonstrated pipeline
 
-1. A prepared video and an open-vocabulary concept prompt enter SAM 3.1.
-2. Masks, boxes, confidence values, and persistent object IDs are normalized
+1. Grounding DINO locates a prompted concept in a prepared video's first frame.
+2. SAM 2.1 propagates masks and persistent object IDs through the video.
+3. Boxes, grounding confidence, masks, and track IDs are normalized
    into the Visual Evidence Graph.
-3. Deterministic tools compute counts, visibility intervals, zone visits,
+4. Deterministic tools compute counts, visibility intervals, zone visits,
    ordering, and supporting evidence.
-4. An LLM selects tools and writes an answer.
-5. Every factual answer links to timestamps and highlighted frames.
+5. An LLM selects tools and writes an answer.
+6. Every factual answer links to timestamps and highlighted frames.
 
 ## Scope
 
 ### Included
 
 - two or three prepared 10-30 second videos;
-- SAM 3.1 offline inference;
+- Grounding DINO 1.0 plus SAM 2.1 offline inference;
 - a versioned evidence schema;
 - six to ten deterministic tools;
 - an LLM tool-calling adapter;
@@ -76,4 +77,3 @@ The final scene must be safe to redistribute and visually legible without text.
 - direct-VLM and grounded-system results recorded from the same questions;
 - a polished browser demo in which cited timestamps seek the video;
 - a Medium article, LinkedIn post, repository release, and hero animation.
-
