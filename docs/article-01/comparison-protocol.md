@@ -9,24 +9,25 @@ inspectable.
 Run both Colab notebooks with:
 
 - the same source MP4;
-- the same semantic concept (`person` for the default official sample);
+- the approved Gemini-generated `sample.mp4` with the expected source digest;
+- the same semantic concept (`white cup`);
 - prompt frame zero;
 - default confidence thresholds;
 - no interactive corrections or model-specific tuning.
 
 Grounding DINO conventionally receives the concept with a trailing period, but
 the recorded prompt is normalized without it. Both notebooks deterministically
-prepare the first three seconds at 4 fps. The Transformers SAM 3 runner uses
-the documented 560-pixel lower-memory configuration, keeps decoded video on
-CPU, and uses FP16 on a T4. This is a correctness smoke test, not a final
-throughput comparison.
+prepare the full ten-second clip at 4 fps and a 560-pixel maximum width. The
+Transformers SAM 3 runner keeps decoded video on CPU and uses FP16 on a T4.
+Zones A and B exclude the narrow normalized x=0.49–0.51 divider band. This is an
+applied correctness run, not a general throughput benchmark.
 
 ## Return artifacts
 
 Keep the two archives separate:
 
-- `article-01-hero-grounded-sam2.zip`
-- `article-01-hero-sam3-transformers.zip`
+- `article-01-cup-crossing-grounded-sam2.zip`
+- `article-01-cup-crossing-sam3.zip`
 
 Each archive contains:
 
