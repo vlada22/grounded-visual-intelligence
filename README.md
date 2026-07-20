@@ -62,6 +62,10 @@ keeps decoded frames on CPU, selects FP16 on a T4, and uses Hugging Face's
 distinct pipeline names and include `scene.json`, recorded model output, masks,
 and run metrics.
 
+[Read the validated matched-run results](docs/article-01/results.md). Both
+pipelines produced two complete tracks on the identical clip, with 0.936 mean
+cross-model mask IoU across matched observations.
+
 ## Project direction
 
 1. Evidence-grounded video memory
