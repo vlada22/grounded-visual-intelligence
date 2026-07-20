@@ -31,7 +31,7 @@ Keep the two archives separate:
 
 Each archive contains:
 
-- the deterministically prepared three-second comparison clip;
+- the deterministically prepared ten-second comparison clip;
 - an annotated overlay preview and contact sheet for visual inspection;
 - per-frame track measurements and an aggregate analysis summary;
 - the raw model recording and model-independent `scene.json`;
