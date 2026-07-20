@@ -53,8 +53,9 @@ evidence schema:
 - Open [`notebooks/article_01_sam3_colab.ipynb`](notebooks/article_01_sam3_colab.ipynb)
   for the gated `facebook/sam3` Transformers video comparison.
 
-Both notebooks now require the approved Gemini-generated `sample.mp4` and
-verify its SHA-256 before GPU work. They process the full ten-second clip with
+Both notebooks load the approved Gemini-generated
+`assets/article-01/sample.mp4` from the repository and verify its SHA-256
+before GPU work. They process the full ten-second clip with
 the `white cup` prompt, 4 fps, a 560-pixel maximum width, and identical A/B
 zones. While this repository is private, both require a read-only
 `GITHUB_TOKEN`. The SAM 3 runner additionally requires an `HF_TOKEN` approved
