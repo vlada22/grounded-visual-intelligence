@@ -53,12 +53,12 @@ evidence schema:
 - Open [`notebooks/article_01_sam3_colab.ipynb`](notebooks/article_01_sam3_colab.ipynb)
   for the gated `facebook/sam3` Transformers video comparison.
 
-Use the identical source video and semantic prompt in both notebooks before
-tuning either model. While this repository is private, both require a read-only
-`GITHUB_TOKEN`. The SAM 3 runner additionally requires an `HF_TOKEN` approved for
-`facebook/sam3`. Its default smoke test uses the official documentation sample,
-keeps decoded frames on CPU, selects FP16 on a T4, and uses Hugging Face's
-560-pixel lower-memory configuration. The resulting ZIP archives have
+Both notebooks now require the approved Gemini-generated `sample.mp4` and
+verify its SHA-256 before GPU work. They process the full ten-second clip with
+the `white cup` prompt, 4 fps, a 560-pixel maximum width, and identical A/B
+zones. While this repository is private, both require a read-only
+`GITHUB_TOKEN`. The SAM 3 runner additionally requires an `HF_TOKEN` approved
+for `facebook/sam3`, keeps decoded frames on CPU, and selects FP16 on a T4. The resulting ZIP archives have
 distinct pipeline names and include `scene.json`, recorded model output, masks,
 and run metrics.
 
