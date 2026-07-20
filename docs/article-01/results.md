@@ -39,7 +39,7 @@ and row-major RLE payloads were also validated before comparison.
 | Zone A observed dwell | 4.00 s | 4.00 s |
 | Zone B interval | 4.00–9.75 s | 4.00–9.75 s |
 | Zone B observed dwell | 6.00 s | 6.00 s |
-| Mean consecutive-mask IoU | 0.8601 | 0.8599 |
+| Mean consecutive-mask IoU | 0.8595 | 0.8599 |
 
 Both systems identify the same deterministic boundary: the cup is last observed
 in A at 3.75 seconds and first observed in B at 4.00 seconds. The transition
