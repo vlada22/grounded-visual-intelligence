@@ -65,4 +65,3 @@ def test_rejects_misaligned_sam3_output_columns() -> None:
                 ],
             }
         )
-

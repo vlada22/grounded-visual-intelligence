@@ -16,6 +16,8 @@ timing, zone occupancy, and evidence retrieval.
 - synthetic executable example
 - initial Article 1 brief and evaluation plan
 - SAM 3.1 recorded-output adapter and fixture
+- dependency-injected SAM 3.1 inference worker
+- portable binary-mask RLE artifacts
 
 The core package deliberately has no PyTorch or SAM dependency. GPU inference
 will run behind an adapter and emit portable recorded-output artifacts.

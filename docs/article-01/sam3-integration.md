@@ -23,9 +23,10 @@ propagated masklet. The relevant upstream references are:
 
 ## Repository contract
 
-The inference worker materializes each binary mask as a separate artifact and
-records its URI. It writes `Sam3RecordedOutput`, a JSON-safe representation that
-retains the official object IDs, probabilities, and normalized boxes.
+The inference worker materializes each binary mask as a separate row-major RLE
+artifact and records its URI. It writes `Sam3RecordedOutput`, a JSON-safe
+representation that retains the official object IDs, probabilities, and
+normalized boxes.
 
 The core adapter then:
 
@@ -39,8 +40,7 @@ The core adapter then:
 
 ## Deliberate omissions
 
-This checkpoint does not install SAM 3.1, download gated weights, or prescribe
-GPU infrastructure. The next inference-worker checkpoint will own:
+`Sam3InferenceWorker` now owns:
 
 - session creation and cleanup;
 - text-prompt submission;
@@ -48,8 +48,18 @@ GPU infrastructure. The next inference-worker checkpoint will own:
 - tensor-to-CPU conversion;
 - binary-mask encoding;
 - raw artifact manifests;
-- latency and hardware measurements.
+
+The worker accepts a predictor protocol, allowing its lifecycle and output
+contract to be tested without a GPU. `build_official_predictor()` imports the
+official model lazily when the upstream package and gated weights are available.
+
+This checkpoint still does not install SAM 3.1, download gated weights, probe
+video metadata, or prescribe GPU infrastructure. Real inference will add:
+
+- video probing and frame validation;
+- latency and peak-memory measurements;
+- an environment-specific runner for the selected GPU;
+- the first redistribution-safe prepared video.
 
 This separation lets tests and the web application operate without a GPU while
 keeping recorded model outputs reproducible.
-

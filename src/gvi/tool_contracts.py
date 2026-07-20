@@ -101,4 +101,3 @@ def _bind(
         input_schema=input_model.model_json_schema(),
     )
     return BoundTool(definition, input_model, handler)
-
