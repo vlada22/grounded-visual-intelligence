@@ -19,7 +19,7 @@ timing, zone occupancy, and evidence retrieval.
 - initial Article 1 brief and evaluation plan
 - Grounding DINO + SAM 2.1 recorded-output adapter and fixture
 - ungated Colab inference path
-- SAM 3.1 Object Multiplex comparison notebook
+- official Transformers SAM 3 video comparison notebook
 - model-neutral SAM 3.1 adapter and dependency-injected worker
 - portable binary-mask RLE artifacts
 
@@ -51,14 +51,14 @@ evidence schema:
 [`notebooks/article_01_grounded_sam2_colab.ipynb`](notebooks/article_01_grounded_sam2_colab.ipynb)
   for the public Grounding DINO 1.0 + SAM 2.1 baseline.
 - Open [`notebooks/article_01_sam3_colab.ipynb`](notebooks/article_01_sam3_colab.ipynb)
-  for the gated SAM 3.1 Object Multiplex comparison.
+  for the gated `facebook/sam3` Transformers video comparison.
 
 Use the identical source video and semantic prompt in both notebooks before
 tuning either model. While this repository is private, both require a read-only
-`GITHUB_TOKEN`. The SAM 3.1 runner additionally requires an `HF_TOKEN` approved
-for `facebook/sam3.1`. For the free-Colab smoke test, both notebooks prepare the
-first three seconds at 4 fps and at most 640 pixels wide; the SAM 3.1 runner uses
-a T4-oriented FP16, non-compiled configuration. The resulting ZIP archives have
+`GITHUB_TOKEN`. The SAM 3 runner additionally requires an `HF_TOKEN` approved for
+`facebook/sam3`. Its default smoke test uses the official documentation sample,
+keeps decoded frames on CPU, selects FP16 on a T4, and uses Hugging Face's
+560-pixel lower-memory configuration. The resulting ZIP archives have
 distinct pipeline names and include `scene.json`, recorded model output, masks,
 and run metrics.
 
