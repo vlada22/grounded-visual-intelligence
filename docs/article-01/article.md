@@ -2,17 +2,17 @@
 
 ## Building an evidence-grounded visual memory with SAM 3, Grounded SAM 2, deterministic tools, and frame-level citations
 
-A vision-language model can watch a video and give you a convincing description. But ask it exactly when an object crossed a boundary, how long it occupied a zone, or which frames support the answer, and the problem changes.
+A vision-language model can watch a video and give you a convincing description. The trouble starts when you ask it exactly when an object crossed a boundary, how long it occupied a zone, or which frames support the answer.
 
 Description is a language task. Measurement is an evidence task.
 
-That distinction is the starting point for **Grounded Visual Intelligence**, an experiment in turning video into structured, queryable evidence before asking a language model to explain anything. The core rule is simple:
+That distinction led me to build [**Grounded Visual Intelligence**](https://github.com/vlada22/grounded-visual-intelligence): an experiment in turning video into structured, queryable evidence before asking a language model to explain anything. I wanted the system to follow one simple rule:
 
 > Let perception models observe. Let deterministic tools measure. Let the LLM plan and explain—with citations.
 
-This article develops that rule into a small working system. It uses [SAM 3](https://arxiv.org/abs/2511.16719) as the primary perception path and [Grounding DINO](https://arxiv.org/abs/2303.05499) plus [SAM 2](https://arxiv.org/abs/2408.00714) as a reproducible baseline. Both pipelines process the same ten-second video, and both emit the same model-independent evidence graph.
+This article turns that rule into a small working system. It uses [SAM 3](https://arxiv.org/abs/2511.16719) as the primary perception path and [Grounding DINO](https://arxiv.org/abs/2303.05499) plus [SAM 2](https://arxiv.org/abs/2408.00714) as a reproducible baseline. Both pipelines process the same ten-second video and emit the same model-independent evidence graph.
 
-The result is not a new segmentation model. It is a clean boundary between perception, measurement, and language.
+The contribution is not another segmentation model. It is a clean boundary between perception, measurement, and language.
 
 ![A white cup crossing from zone A to zone B, with SAM 3 evidence overlaid.](assets/cup-transition-evidence.gif)
 
@@ -32,9 +32,9 @@ A multimodal model may answer “around four seconds.” That can be useful, but
 - Can another component reproduce the answer without re-running the LLM?
 - Can a reviewer seek directly to the supporting frames?
 
-The failure mode is not limited to incorrect answers. An answer may be approximately right but operationally weak because its evidence, semantics, and uncertainty are hidden.
+The problem is not limited to answers that are simply wrong. An answer may be approximately right and still be operationally weak because its evidence, semantics, and uncertainty are hidden.
 
-For measurable video questions, I want a different contract. The language model should not estimate a timestamp from pixels if the system can compute that timestamp from tracked observations.
+For measurable video questions, I want a different contract. If the system can compute a timestamp from tracked observations, the language model should not have to estimate it from pixels.
 
 ![Architecture: video becomes perception evidence, which deterministic tools measure before an LLM explains the result.](assets/01-evidence-pipeline.png)
 
@@ -52,7 +52,7 @@ SAM 3 is a natural fit for the primary path because its Promptable Concept Segme
 
 The baseline separates the same responsibilities. Grounding DINO converts a text prompt into an open-set detection on the first frame; SAM 2 then propagates the selected object through video using its streaming-memory architecture. This follows the broader [Grounded SAM](https://arxiv.org/abs/2401.14159) pattern of composing open-world models.
 
-These are different model stacks, but the rest of the application should not care.
+These are very different model stacks. The rest of the application should not have to care.
 
 ### 2. An evidence graph normalizes the output
 
@@ -88,19 +88,19 @@ The scene memory exposes operations such as:
 - identify the last observation in one zone and the first in another;
 - return the exact track, frames, and time range used as evidence.
 
-An answer is therefore a value plus an evidence reference, not just a sentence.
+So an answer is a value plus an evidence reference—not just a plausible sentence.
 
 ### 4. The LLM orchestrates and explains
 
 The LLM can translate a user question into tool calls and turn the result into readable language. But it does not own the count, the transition rule, or the timestamp. Those remain deterministic and inspectable.
 
-This is a modest form of grounding, but an important one: generation happens after measurement.
+This is a modest kind of grounding, but it changes the reliability of the whole interaction: generation happens after measurement.
 
 ## The controlled scene
 
-I tested the contract on a deliberately simple synthetic scene: a white cup moves from a region marked A to a region marked B, crossing a narrow divider while passing over a notebook.
+I chose a deliberately simple synthetic scene: a white cup moves from a region marked A to a region marked B, crossing a narrow divider while passing over a notebook. The scene is almost boring—and that is useful. A simple clip makes it easier to inspect every assumption before moving on to crowded, ambiguous video.
 
-The source clip was generated with Gemini and added to the repository by the owner. Both notebooks verified the same source SHA-256 and produced byte-identical prepared input:
+The source clip was generated with Gemini and then versioned in the repository. Both notebooks verified the same source SHA-256 and produced byte-identical prepared input:
 
 | Property | Value |
 | --- | --- |
@@ -115,7 +115,7 @@ The source clip was generated with Gemini and added to the repository by the own
 
 The A and B zones exclude a narrow normalized band around the divider. Zone membership uses the normalized center of the tracked bounding box. At 4 fps, the finest possible transition resolution in this run is 250 milliseconds.
 
-This is intentionally an applied smoke test, not a general segmentation benchmark.
+This is an applied smoke test, not a general segmentation benchmark. I would rather make that boundary explicit than turn one clean example into a larger claim.
 
 ![Four frames showing the cup approaching the boundary, last appearing in A, first appearing in B, and becoming established in B.](assets/02-transition-window.jpg)
 
@@ -146,9 +146,9 @@ The measured occupancy was also identical:
 
 “Observed dwell” matters here. It is the number of sampled observations assigned to the zone multiplied by the 250 ms sampling period. It should not be confused with a continuous, sub-frame physical measurement.
 
-## What the two model paths agreed on
+## How closely did the two model paths agree?
 
-I matched the single cup tracks frame by frame and compared their binary masks, bounding boxes, and mask centroids.
+Finding the same cup was the expected part. The more interesting question was whether the two pipelines produced similar enough spatial evidence to support the same measurements. I matched their single cup tracks frame by frame and compared the binary masks, bounding boxes, and mask centroids.
 
 Across all 40 frames:
 
@@ -172,7 +172,7 @@ There is an important limit to this result: **agreement is not accuracy**.
 
 The clip has no hand-annotated ground-truth masks. Two systems can agree and still be wrong in the same way. The comparison supports a narrower conclusion: for this controlled scene, either perception stack yields substantively the same downstream evidence and deterministic answer.
 
-That is enough to validate the adapter boundary. It is not enough to rank the models.
+That is enough to validate the adapter boundary. It is not enough to declare a winner.
 
 ## Confidence is part of the schema—not a universal number
 
@@ -182,7 +182,7 @@ In the Grounded SAM 2 recording, the confidence attached to propagated observati
 
 The evidence explorer therefore labels them differently: **seed score** and **track score**.
 
-This may sound like a small UI detail. It is actually a data-contract requirement. A generic field named `confidence` is only useful when its provenance and meaning travel with it.
+This may sound like a fussy UI detail, but it is really a data-contract requirement. A generic field named `confidence` is only useful when its provenance and meaning travel with it.
 
 ## Operational observations, not a speed leaderboard
 
@@ -190,13 +190,13 @@ Both runs recorded phase timings and memory on a Colab T4.
 
 Grounded SAM 2 took 37.30 seconds across model load, grounding, session initialization, and propagation. The corresponding SAM 3 path took 19.57 seconds. Peak allocated GPU memory was 3.28 GiB and 1.81 GiB respectively.
 
-However, the dependency boundaries differ, the model loading paths differ, and these are single runs. The process RSS result also moves in the opposite direction: 3.88 GiB for Grounded SAM 2 versus 5.23 GiB for SAM 3. Treating one of these stacks as categorically “faster” or “lighter” would overstate the evidence.
+It is tempting to stop there and call SAM 3 faster and lighter. The data does not support that conclusion yet. The dependency boundaries differ, the model-loading paths differ, and these are single runs. Process RSS also moves in the opposite direction: 3.88 GiB for Grounded SAM 2 versus 5.23 GiB for SAM 3.
 
 ![Two-panel plot of recorded phase timings and peak memory for Grounded SAM 2 and SAM 3.](assets/04-run-profile.png)
 
 *Figure 4. One-run operational provenance. Checkpoint download time is excluded from the phase chart.*
 
-The Grounded SAM 2 notebook also reported that its optional compiled `_C` extension could not be imported, so optional post-processing was skipped. Core propagation completed normally, and archive validation plus visual inspection found no material failure in this scene. I retained the warning as run evidence rather than silently removing it from the story.
+The Grounded SAM 2 notebook also reported that its optional compiled `_C` extension could not be imported, so optional post-processing was skipped. Core propagation completed normally, and archive validation plus visual inspection found no material failure in this scene. I kept the warning in the record. Reproducibility is more useful when it includes the awkward setup details too.
 
 ## Making the answer inspectable
 
@@ -212,11 +212,11 @@ The explorer lets a reader:
 
 SAM 3 is the default view because it provides the cleanest primary concept-prompted path. Grounded SAM 2 stays available as the ungated baseline.
 
-The site is already implemented as a dependency-free static application. Public hosting is intentionally deferred until the private repository is made public; the recorded GIF and figures in this article remain fully reproducible from the returned archives.
+The explorer is a dependency-free static application. You can [open the live evidence explorer](https://vlada22.github.io/grounded-visual-intelligence/web/) or inspect its implementation in the [GitHub repository](https://github.com/vlada22/grounded-visual-intelligence). The recorded GIF and figures in this article are reproducible from the two notebook archives.
 
 ## What this experiment proves—and what it does not
 
-The useful result is architectural.
+For me, the most useful result is architectural.
 
 It shows that two different video-perception stacks can be reduced to one stable evidence contract. Once that contract exists, temporal and spatial questions become deterministic operations over tracks instead of open-ended guesses over pixels. The LLM becomes easier to trust because its factual burden is smaller.
 
@@ -228,13 +228,13 @@ Those are the next tests:
 2. Add multiple instances, occlusion, disappearance, and re-entry.
 3. Separate identity uncertainty from mask uncertainty and temporal sampling uncertainty.
 4. Extend the graph with depth, 3D geometry, and spatial relations.
-5. Publish the static explorer when the repository can be public.
+5. Measure end-to-end answer quality, latency, and cost with and without the evidence layer.
 
 ## The larger idea
 
 Video foundation models are becoming better at detecting, segmenting, and tracking concepts. That makes the layer above them more—not less—important.
 
-Applications need to preserve what was observed, when it was observed, how it was measured, and which artifact supports a claim. Otherwise a powerful perception model is reduced to another opaque input to a text generator.
+Applications still need to preserve what was observed, when it was observed, how it was measured, and which artifact supports a claim. Otherwise even a powerful perception model becomes another opaque input to a text generator.
 
 My preferred design principle is now straightforward:
 
@@ -246,7 +246,7 @@ That is the difference between a video system that sounds correct and one that c
 
 ### Reproducibility note
 
-The repository contains the model-independent Python package, adapters, tests, two Colab notebooks, the controlled source clip, validated result documentation, the static explorer, and the plotting source used for the figures above. Exact source, prepared-input, checkpoint, archive, and model-revision digests are recorded in the run artifacts and project results document.
+The complete [Grounded Visual Intelligence repository](https://github.com/vlada22/grounded-visual-intelligence) contains the model-independent Python package, adapters, tests, two Colab notebooks, the controlled source clip, validated result documentation, the static explorer, and the plotting source used for the figures above. Exact source, prepared-input, checkpoint, archive, and model-revision digests are recorded in the run artifacts and project results document.
 
 ### References
 
