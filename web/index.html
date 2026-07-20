@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="An interactive, evidence-grounded visual memory built from matched Grounded SAM 2 and SAM 3 video runs."
+    />
+    <title>Grounded Visual Intelligence — Evidence Explorer</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Grounded Visual Intelligence home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>Grounded Visual Intelligence</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#explorer">Explorer</a>
+        <a href="#comparison">Comparison</a>
+        <a
+          class="repo-link"
+          href="https://github.com/vlada22/grounded-visual-intelligence"
+          rel="noreferrer"
+        >Repository <span aria-hidden="true">↗</span></a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Article 01 · Evidence-grounded video memory</p>
+          <h1>Ask the video,<br /><em>not just the VLM.</em></h1>
+          <p class="hero-lede">
+            A perception model observes. Deterministic tools measure. A language
+            model can plan and explain—without inventing the count, event, or timestamp.
+          </p>
+          <div class="claim-row" aria-label="System properties">
+            <span><i></i> Recorded perception</span>
+            <span><i></i> Deterministic query</span>
+            <span><i></i> Inspectable citations</span>
+          </div>
+        </div>
+        <aside class="hero-note">
+          <span class="note-index">01</span>
+          <p>
+            One ten-second scene. Two independent perception stacks. One shared
+            evidence contract.
+          </p>
+          <dl>
+            <div><dt>Prompt</dt><dd>white cup</dd></div>
+            <div><dt>Sample rate</dt><dd>4 fps</dd></div>
+            <div><dt>Evidence</dt><dd>40 / 40 frames</dd></div>
+          </dl>
+        </aside>
+      </section>
+
+      <section class="explorer-section" id="explorer" aria-labelledby="explorer-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Interactive evidence explorer</p>
+            <h2 id="explorer-title">Follow the answer back to the pixels.</h2>
+          </div>
+          <p>
+            Switch models, scrub the recorded scene, and inspect the exact frames
+            supporting the deterministic A→B transition.
+          </p>
+        </div>
+
+        <div class="lab-grid">
+          <article class="video-card">
+            <div class="video-toolbar">
+              <div class="segmented" role="group" aria-label="Perception model">
+                <button class="model-button is-active" data-model="sam3" type="button">SAM 3</button>
+                <button class="model-button" data-model="groundedSam2" type="button">Grounded SAM 2</button>
+              </div>
+              <div class="overlay-controls" aria-label="Overlay controls">
+                <button class="toggle is-active" data-layer="mask" type="button">Mask</button>
+                <button class="toggle is-active" data-layer="box" type="button">Box</button>
+                <button class="toggle is-active" data-layer="zones" type="button">Zones</button>
+              </div>
+            </div>
+
+            <div class="video-stage" id="videoStage">
+              <video id="sceneVideo" preload="metadata" playsinline muted>
+                Your browser does not support H.264 video playback.
+              </video>
+              <canvas id="overlay" width="560" height="316" aria-hidden="true"></canvas>
+              <div class="video-badge"><span></span><b id="modelBadge">SAM 3</b> recorded output</div>
+              <div class="frame-badge" id="frameBadge">frame 00 · 0.00 s</div>
+            </div>
+
+            <div class="playback">
+              <button class="icon-button" id="playButton" type="button" aria-label="Play video">▶</button>
+              <button class="icon-button small" id="previousFrame" type="button" aria-label="Previous sampled frame">−1</button>
+              <div class="scrubber-wrap">
+                <input
+                  id="scrubber"
+                  type="range"
+                  min="0"
+                  max="10"
+                  step="0.01"
+                  value="0"
+                  aria-label="Video timeline"
+                />
+                <div class="event-marker" style="--position: 37.5%" title="Last observed in A"></div>
+                <div class="event-marker accent" style="--position: 40%" title="First observed in B"></div>
+              </div>
+              <button class="icon-button small" id="nextFrame" type="button" aria-label="Next sampled frame">+1</button>
+              <output class="timecode" id="timecode">00:00.00 / 00:10.00</output>
+            </div>
+
+            <div class="legend" aria-label="Overlay legend">
+              <span><i class="legend-mask"></i> tracked concept</span>
+              <span><i class="legend-a"></i> zone A</span>
+              <span><i class="legend-b"></i> zone B</span>
+              <span class="keyboard-hint">← → step by 250 ms</span>
+            </div>
+          </article>
+
+          <aside class="answer-card">
+            <div class="query-label"><span>Q</span> Deterministic question</div>
+            <h3>When does the white cup move from zone A to zone B?</h3>
+            <div class="answer-block">
+              <span class="answer-kicker">Measured answer</span>
+              <p>
+                The cup is last observed in A at <strong>3.75 s</strong> and first
+                observed in B at <strong>4.00 s</strong>.
+              </p>
+              <p class="answer-note">Transition resolution: one sampled frame · 250 ms</p>
+            </div>
+
+            <div class="evidence-heading">
+              <span>Supporting evidence</span>
+              <span>click to seek</span>
+            </div>
+            <div class="evidence-chips">
+              <button type="button" data-seek="3.5"><b>F14</b><span>3.50 s · A</span></button>
+              <button type="button" data-seek="3.75"><b>F15</b><span>3.75 s · A</span></button>
+              <button type="button" data-seek="4"><b>F16</b><span>4.00 s · B</span></button>
+              <button type="button" data-seek="4.25"><b>F17</b><span>4.25 s · B</span></button>
+            </div>
+
+            <div class="provenance-chain" aria-label="Answer provenance">
+              <div><span>01</span><p><b>Find track</b><small id="trackIdentity">sam3:0 · white cup</small></p></div>
+              <div><span>02</span><p><b>Measure occupancy</b><small>A 4.00 s · B 6.00 s</small></p></div>
+              <div><span>03</span><p><b>Cite boundary</b><small>frames 15 → 16</small></p></div>
+            </div>
+
+            <div class="model-footnote">
+              <span id="scoreLabel">Track score 0.979</span>
+              <p>Scores describe different model boundaries and are not treated as calibrated frame confidence.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="comparison-section" id="comparison" aria-labelledby="comparison-title">
+        <div class="section-heading compact">
+          <div>
+            <p class="eyebrow">Matched perception run</p>
+            <h2 id="comparison-title">Different models. Substantively the same evidence.</h2>
+          </div>
+          <p>
+            Both systems processed the same prepared bytes. This is an applied
+            smoke test—not a general accuracy or throughput benchmark.
+          </p>
+        </div>
+
+        <div class="comparison-grid">
+          <article class="agreement-card">
+            <span class="metric-label">Cross-model mask agreement</span>
+            <div class="big-metric">96.94<small>% mean IoU</small></div>
+            <div class="agreement-track"><span></span></div>
+            <div class="metric-range"><span>94.87% min</span><span>98.29% max</span></div>
+            <p>
+              Across all 40 matched observations. The lowest overlap occurs at
+              3.75 s, while the cup is moving across the notebook.
+            </p>
+          </article>
+
+          <article class="model-metrics">
+            <div class="metric-table-header">
+              <span>Recorded metric</span><b>Grounded SAM 2</b><b>SAM 3</b>
+            </div>
+            <div><span>Frames with evidence</span><b>40 / 40</b><b>40 / 40</b></div>
+            <div><span>Track gaps</span><b>0</b><b>0</b></div>
+            <div><span>Model execution</span><b>37.30 s</b><b>19.57 s</b></div>
+            <div><span>Peak GPU allocation</span><b>3.28 GiB</b><b>1.81 GiB</b></div>
+            <div><span>Mean bbox IoU</span><b class="joined" aria-label="Shared value">96.48% cross-model</b></div>
+          </article>
+        </div>
+
+        <div class="evidence-strip">
+          <div><span>Track</span><b>1 concept · 40 observations</b></div>
+          <div><span>Zone A</span><b>0.00–3.75 s</b></div>
+          <div><span>Zone B</span><b>4.00–9.75 s</b></div>
+          <div><span>Centroid difference</span><b>0.45 px mean</b></div>
+        </div>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div class="section-heading compact">
+          <div>
+            <p class="eyebrow">The grounding contract</p>
+            <h2 id="method-title">Keep interpretation and measurement separate.</h2>
+          </div>
+        </div>
+        <div class="method-grid">
+          <article><span>01</span><h3>Observe</h3><p>An open-vocabulary video model emits masks, boxes, persistent IDs, and provenance.</p></article>
+          <article><span>02</span><h3>Measure</h3><p>A model-neutral evidence graph computes counts, intervals, zone visits, and dwell time.</p></article>
+          <article><span>03</span><h3>Explain</h3><p>An LLM may select tools and phrase the result, while every measured claim retains citations.</p></article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Grounded Visual Intelligence · Article 01 research checkpoint</p>
+      <p>Gemini-generated source video · Recorded on a Tesla T4 · No live inference</p>
+    </footer>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
