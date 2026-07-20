@@ -1,98 +1,120 @@
-# Article 1 — matched perception run
+# Article 1 — matched cup-crossing perception run
 
 ## Status
 
-The first controlled run is complete. Both pipelines processed the identical
-prepared clip and produced valid, complete evidence archives.
+The controlled hero-scene run is complete. Grounding DINO 1.0 + SAM 2.1 and
+SAM 3 Transformers processed byte-identical prepared input and produced valid,
+complete evidence archives.
 
-This is an applied smoke test on one short clip, not a general model benchmark.
+This is an applied smoke test on one short generated clip, not a general model
+benchmark.
 
 ## Reproducibility
 
 | Field | Value |
 | --- | --- |
 | Runtime | Google Colab, Tesla T4 (14.56 GiB), CUDA 12.8, Torch 2.11.0 |
-| Source | `hf-internal-testing/sam2-fixtures/bedroom.mp4` |
-| Source SHA-256 | `1be76d5d19b066e8ad7c565d88a98e11a8f8d456a707508a7aa35390def70e30` |
-| Prepared SHA-256 | `8007058483188405474f9ccb088008975ae5c131c71382de865e5300aa8cf1b4` |
-| Prepared input | 3 seconds, 4 fps, 560 × 316 pixels, 12 frames |
-| Prompt | `person` |
-| Grounded SAM 2 bundle | `08c760b7eb21a0a435ad5821a392ffcda957b967e2156cf4dd886a830bfbde81` |
-| SAM 3 bundle | `7470e803f820ca3af8f23fd2a098491d1ae9f53c1df40f2f62da0fb55ad79086` |
+| Source | `assets/article-01/sample.mp4` |
+| Source provenance | Gemini-generated video supplied by the repository owner |
+| Source SHA-256 | `4bc06ddbbcc711f3ec706f9d25cd7377638f3ef81b08c5d0142e6342db5f3060` |
+| Prepared SHA-256 | `db1e6fb06413e31722e2678f8f6d3282cdeb50630a5ec94e18100f6366f68e49` |
+| Prepared input | 10 seconds, 4 fps, 560 × 316 pixels, 40 frames |
+| Prompt | `white cup` |
+| Grounded SAM 2 archive | `109ee46c5ad7b41b3acd3842dd3c6b3d99f34aee011963b7113e913a59d6e327` |
+| SAM 3 archive | `74b8d147f2546e50f8048a1e46ff5e78d411acaa211234086f7ea8b553bf20a3` |
 
-Both integrity manifests were verified file by file. Both archives also passed
-safe-path, schema, mask-dimension, mask-reference, and RLE-expansion checks.
+Both archives passed safe-path, duplicate-entry, manifest-coverage, byte-length,
+and SHA-256 validation. Their scene documents, mask dimensions, mask references,
+and row-major RLE payloads were also validated before comparison.
 
 ## Evidence result
 
 | Measurement | Grounding DINO 1.0 + SAM 2.1 | SAM 3 Transformers |
 | --- | ---: | ---: |
-| Tracks | 2 | 2 |
-| Observations | 24 | 24 |
-| Frames with evidence | 12 / 12 | 12 / 12 |
+| Tracks | 1 | 1 |
+| Observations | 40 | 40 |
+| Frames with evidence | 40 / 40 | 40 / 40 |
 | Track gaps | 0 | 0 |
-| Mean consecutive-mask IoU | 0.3548 | 0.3541 |
-| Mean allocated GPU memory | not measured | not measured |
-| Peak allocated GPU memory | 4.059 GiB | 2.049 GiB |
-| Peak reserved GPU memory | 9.715 GiB | 2.260 GiB |
-| Peak process RSS | 3.690 GiB | 5.255 GiB |
+| Zone A interval | 0.00–3.75 s | 0.00–3.75 s |
+| Zone A observed dwell | 4.00 s | 4.00 s |
+| Zone B interval | 4.00–9.75 s | 4.00–9.75 s |
+| Zone B observed dwell | 6.00 s | 6.00 s |
+| Mean consecutive-mask IoU | 0.8601 | 0.8599 |
 
-After matching identities across the systems:
+Both systems identify the same deterministic boundary: the cup is last observed
+in A at 3.75 seconds and first observed in B at 4.00 seconds. The transition
+resolution is one sampled frame, or 250 milliseconds.
 
-- adult mean cross-model mask IoU: **0.9634**;
-- child mean cross-model mask IoU: **0.9080**;
-- all matched observations mean mask IoU: **0.9357**;
-- lowest matched IoU: **0.6368**, for the child at frame 8 during strong
-  overlap/occlusion.
+## Cross-model agreement
 
-Visual inspection found no identity switch, duplicate track, missing mask, or
-obvious semantic false positive. The adult masks are nearly interchangeable.
-Most disagreement comes from the smaller, partially occluded child.
+The single cup tracks were matched observation-by-observation across all 40
+frames.
+
+| Measurement | Result |
+| --- | ---: |
+| Mean mask IoU | **0.9694** |
+| Median mask IoU | 0.9692 |
+| Minimum mask IoU | 0.9487 at frame 15 (3.75 s) |
+| Maximum mask IoU | 0.9829 |
+| Mean bounding-box IoU | 0.9648 |
+| Mean mask-centroid distance | 0.447 px |
+| Maximum mask-centroid distance | 1.068 px |
+| Mean SAM 2 / SAM 3 mask-area ratio | 1.0176 |
+
+The lowest mask overlap occurs while the cup is moving across the notebook near
+the zone boundary. Even there, the systems agree on the object, identity, zone,
+and supporting time range. Visual inspection found no identity switch, duplicate
+track, missing mask, semantic false positive, or material mask leak.
 
 ## Confidence semantics
 
 The scores must not be compared as calibrated frame confidence.
 
-Grounded SAM 2 repeats the two first-frame Grounding DINO seed scores
-(0.8370 and 0.8076) across the propagated observations. SAM 3 reports 0.96484375
-for both identities on every frame. These values describe different model
-boundaries and neither archive currently provides an independently calibrated
-per-frame visibility probability.
+- Grounded SAM 2 repeats the first-frame Grounding DINO seed score across
+  propagated observations.
+- SAM 3 reports one repeated text-prompted track score across this recording.
 
-## Recorded timing
+The web explorer therefore labels them as a seed score and a track score rather
+than presenting either as 40 independent confidence measurements.
+
+## Recorded timing and memory
 
 | Phase | Grounded SAM 2 | SAM 3 |
 | --- | ---: | ---: |
-| Model load | 7.125 s | 6.783 s |
-| Grounding or prompt | 3.162 s | 0.004 s |
-| Session initialization | 0.412 s | 0.245 s |
-| Video propagation | 6.999 s | 13.000 s |
-| Recorded model total | 17.697 s | 20.032 s |
+| Checkpoint/model download | 14.325 s | 31.234 s |
+| Model load | 15.719 s | 8.868 s |
+| Grounding or prompt | 4.026 s | 0.001 s |
+| Session initialization | 1.601 s | 0.511 s |
+| Video propagation/inference | 15.958 s | 10.186 s |
+| Recorded model total, excluding download | 37.303 s | 19.567 s |
+| Peak allocated GPU memory | 3.283 GiB | 1.810 GiB |
+| Peak reserved GPU memory | 6.242 GiB | 1.877 GiB |
+| Peak process RSS | 3.876 GiB | 5.233 GiB |
 
-The SAM 3 timing is **provisional and must not be used for a performance
-conclusion**. Its archive records `torch.bfloat16` on a Tesla T4. NVIDIA
-documents T4 Tensor Core acceleration for FP16/FP32, INT8, and INT4, not BF16.
-The notebook incorrectly relied on PyTorch's software support check and has now
-been corrected to select FP16 for compute capability 7.5.
+These numbers describe two individual Colab runs with different dependency and
+model boundaries. They are useful operational observations, not sufficient
+evidence for a general speed or memory ranking.
 
-Download timings are also excluded: the Grounded SAM 2 checkpoints were cached,
-while the SAM 3 snapshot download took 25.7 seconds.
+## Setup observation
+
+The Grounded SAM 2 run reported that its optional compiled `_C` extension could
+not be imported, so SAM 2 skipped optional post-processing. Core propagation
+completed normally. The warning is retained as setup evidence; the artifact
+validation, quantitative comparison, and visual inspection found no material
+failure in this scene.
 
 ## Applied conclusion
 
-On this clip, the two systems produce substantively the same evidence. There is
-no accuracy result here that justifies choosing one over the other.
+On the controlled cup-crossing scene, both perception stacks produce
+substantively the same queryable evidence. The 0.9694 mean cross-model mask IoU
+is supportive agreement, not ground-truth accuracy.
 
 For Article 1:
 
-- use **SAM 3 as the primary recorded demo path** because it exposes one
-  text-prompted video model boundary and used substantially less T4 GPU memory;
-- keep **Grounded SAM 2 as the ungated reproducible baseline**;
-- make the article's real contribution the model-independent evidence graph,
-  deterministic measurements, and inspectable citations;
-- do not claim a SAM 3 speed advantage or general accuracy advantage from this
-  run.
-
-A later performance table may add one FP16 SAM 3 timing sample if a cached T4
-session is available, but the present artifacts are sufficient for the article's
-functional comparison and web demo.
+- use **SAM 3 as the primary recorded interaction path**;
+- keep **Grounded SAM 2 as the public, ungated reproducible baseline**;
+- center the article on the model-independent evidence graph, deterministic
+  measurements, and inspectable citations;
+- present performance numbers as run provenance rather than a benchmark claim;
+- use the browser explorer to make every claimed timestamp seekable and every
+  perception overlay switchable.
