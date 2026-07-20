@@ -7,7 +7,10 @@ The first article, **Ask the Video, Not Just the VLM**, builds a temporal visual
 memory from object tracks and exposes deterministic tools for counting, timing,
 zone occupancy, and evidence retrieval.
 
-[Open the GitHub Pages evidence explorer](https://vlada22.github.io/grounded-visual-intelligence/)
+[Read the complete Article 01 draft](docs/article-01/article.md).
+
+The artifact-backed explorer is available under `web/`. Public GitHub Pages
+hosting is intentionally deferred while the repository remains private.
 
 ## Current checkpoint
 
@@ -22,7 +25,7 @@ zone occupancy, and evidence retrieval.
 - model-neutral SAM 3 adapter and dependency-injected worker
 - portable binary-mask RLE artifacts
 - matched cup-crossing results from both perception stacks
-- artifact-backed browser explorer deployed through GitHub Pages
+- artifact-backed browser explorer ready for static hosting
 
 The core package deliberately has no PyTorch or SAM dependency. GPU inference
 runs behind an adapter and emits portable recorded-output artifacts.
@@ -52,8 +55,8 @@ versioned source video:
 python -m http.server 8000
 ```
 
-Then open `http://localhost:8000/web/`. GitHub Pages deployment is defined in
-`.github/workflows/pages.yml`.
+Then open `http://localhost:8000/web/`. A future GitHub Pages deployment is
+defined in `.github/workflows/pages.yml`, but publishing is currently deferred.
 
 ## Compare the perception stacks on Colab
 
