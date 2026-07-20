@@ -23,6 +23,12 @@ let activeModel = "sam3";
 const layers = { mask: true, box: true, zones: true };
 const decodedMasks = new Map();
 
+// GitHub Pages publishes `web/` as the site root, while local repository
+// serving exposes the explorer at `/web/` and the source video at `/assets/`.
+video.src = window.location.pathname.includes("/web/")
+  ? "../assets/article-01/sample.mp4"
+  : "./assets/sample.mp4";
+
 function formatTime(seconds) {
   const safe = Math.max(0, Number.isFinite(seconds) ? seconds : 0);
   const minutes = Math.floor(safe / 60).toString().padStart(2, "0");
