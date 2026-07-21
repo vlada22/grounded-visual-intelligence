@@ -9,8 +9,7 @@ zone occupancy, and evidence retrieval.
 
 [Read the complete Article 01 draft](docs/article-01/article.md).
 
-The artifact-backed explorer is available under `web/`. Public GitHub Pages
-hosting is intentionally deferred while the repository remains private.
+[Open the live artifact-backed evidence explorer](https://vlada22.github.io/grounded-visual-intelligence/).
 
 ## Current checkpoint
 
@@ -25,7 +24,7 @@ hosting is intentionally deferred while the repository remains private.
 - model-neutral SAM 3 adapter and dependency-injected worker
 - portable binary-mask RLE artifacts
 - matched cup-crossing results from both perception stacks
-- artifact-backed browser explorer ready for static hosting
+- artifact-backed browser explorer deployed through GitHub Pages
 
 The core package deliberately has no PyTorch or SAM dependency. GPU inference
 runs behind an adapter and emits portable recorded-output artifacts.
@@ -55,8 +54,8 @@ versioned source video:
 python -m http.server 8000
 ```
 
-Then open `http://localhost:8000/web/`. A future GitHub Pages deployment is
-defined in `.github/workflows/pages.yml`, but publishing is currently deferred.
+Then open `http://localhost:8000/web/`. The public deployment is assembled by
+`.github/workflows/pages.yml` and served through GitHub Pages.
 
 ## Compare the perception stacks on Colab
 
@@ -72,8 +71,8 @@ evidence schema:
 Both notebooks load the approved Gemini-generated
 `assets/article-01/sample.mp4` from the repository and verify its SHA-256 before
 GPU work. They process the full ten-second clip with the `white cup` prompt,
-4 fps, a 560-pixel maximum width, and identical A/B zones. While this repository
-is private, both require a read-only `GITHUB_TOKEN`. The SAM 3 runner additionally
+4 fps, a 560-pixel maximum width, and identical A/B zones. Both notebook presets
+read a read-only `GITHUB_TOKEN` for repository access. The SAM 3 runner additionally
 requires an `HF_TOKEN` approved for `facebook/sam3`, keeps decoded frames on CPU,
 and selects FP16 on a T4.
 
