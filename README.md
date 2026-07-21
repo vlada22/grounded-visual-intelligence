@@ -8,6 +8,7 @@ memory from object tracks and exposes deterministic tools for counting, timing,
 zone occupancy, and evidence retrieval.
 
 [Read the complete Article 01 draft](docs/article-01/article.md).
+[Use the LinkedIn publishing kit](docs/article-01/linkedin/README.md).
 
 [Open the live artifact-backed evidence explorer](https://vlada22.github.io/grounded-visual-intelligence/).
 
