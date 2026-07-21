@@ -5,18 +5,18 @@ grounding contract. It performs no GPU inference and makes no network request to
 a language model. That separation keeps the interaction fast, reproducible, and
 suitable for linking from Medium and LinkedIn.
 
-Public GitHub Pages hosting is intentionally deferred while the repository
-remains private. The explorer can be run locally from the repository root.
+[Open the live evidence explorer](https://vlada22.github.io/grounded-visual-intelligence/).
+It can also be run locally from the repository root.
 
 ## Repository source
 
 - application: `web/index.html`, `web/styles.css`, and `web/app.js`;
 - recorded evidence: `web/data/evidence.json`;
 - publishable source video: `assets/article-01/sample.mp4`;
-- future deployment: `.github/workflows/pages.yml` through GitHub Pages.
+- deployment: `.github/workflows/pages.yml` through GitHub Pages.
 
-When enabled, the deployment workflow assembles the static site and copies the
-repository video into the Pages artifact. The evidence payload contains the two normalized
+The deployment workflow assembles the static site and copies the repository
+video into the Pages artifact. The evidence payload contains the two normalized
 scene tracks and their portable RLE masks, so the browser renders model-specific
 overlays without storing a second video or requiring a backend.
 
