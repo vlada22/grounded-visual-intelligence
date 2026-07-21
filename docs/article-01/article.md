@@ -2,6 +2,8 @@
 
 ## Building an evidence-grounded visual memory with SAM 3, Grounded SAM 2, deterministic tools, and frame-level citations
 
+After years of working with video analytics, I keep returning to the same uncomfortable question: when a system gives a precise answer about a video, can it show where that answer came from?
+
 A vision-language model can watch a video and give you a convincing description. The trouble starts when you ask it exactly when an object crossed a boundary, how long it occupied a zone, or which frames support the answer.
 
 Description is a language task. Measurement is an evidence task.
@@ -212,7 +214,7 @@ The explorer lets a reader:
 
 SAM 3 is the default view because it provides the cleanest primary concept-prompted path. Grounded SAM 2 stays available as the ungated baseline.
 
-The explorer is a dependency-free static application. You can [open the live evidence explorer](https://vlada22.github.io/grounded-visual-intelligence/web/) or inspect its implementation in the [GitHub repository](https://github.com/vlada22/grounded-visual-intelligence). The recorded GIF and figures in this article are reproducible from the two notebook archives.
+The explorer is a dependency-free static application. You can [open the live evidence explorer](https://vlada22.github.io/grounded-visual-intelligence/) or inspect its implementation in the [GitHub repository](https://github.com/vlada22/grounded-visual-intelligence). The recorded GIF and figures in this article are reproducible from the two notebook archives.
 
 ## What this experiment proves—and what it does not
 
@@ -241,6 +243,8 @@ My preferred design principle is now straightforward:
 > If a visual fact can be measured, do not ask the language model to invent it. Give the model a tool, preserve the evidence, and make the answer seekable.
 
 That is the difference between a video system that sounds correct and one that can show its work.
+
+I’ve published the code, notebooks, evidence artifacts, and [interactive explorer](https://vlada22.github.io/grounded-visual-intelligence/) in the [GitHub repository](https://github.com/vlada22/grounded-visual-intelligence). Where would you draw the boundary between perception, measurement, and language reasoning in a production visual system?
 
 ---
 
