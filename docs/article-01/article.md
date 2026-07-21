@@ -2,6 +2,11 @@
 
 ## Building an evidence-grounded visual memory with SAM 3, Grounded SAM 2, deterministic tools, and frame-level citations
 
+## Artifacts
+
+- [GitHub repository](https://github.com/vlada22/grounded-visual-intelligence)
+- [Live evidence explorer](https://vlada22.github.io/grounded-visual-intelligence/)
+
 After years of working with video analytics, I keep returning to the same uncomfortable question: when a system gives a precise answer about a video, can it show where that answer came from?
 
 A vision-language model can watch a video and give you a convincing description. The trouble starts when you ask it exactly when an object crossed a boundary, how long it occupied a zone, or which frames support the answer.
